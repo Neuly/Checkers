@@ -6,6 +6,10 @@ int HEIGHT = 460;
 /* number of players on each side */
 int NUM_PLAYER = 8;
 
+/* if the button was pressed, it should be redrawn every time */
+boolean a_button_pressed;
+int pressed_i;
+int pressed_j;
 int PLAYER_ONE = 1;
 int PLAYER_TWO = -1;
 
@@ -15,10 +19,13 @@ class button {
   float y;
   int player;
   boolean pressed;
-  
+  float old_x;
+  float old_y;
   button (float _x, float _y, int _player, boolean _pressed) {
       x = _x;
       y = _y;
+      old_x = x;
+      old_y = y;
       player = _player;
       pressed = _pressed;
   }
@@ -35,15 +42,33 @@ class button {
   boolean getStatus() {
     return pressed;
   }
+  
+  void setPressed(boolean _pressed) {
+    pressed = _pressed;
+  }
+  
+  void setXY(int _x, int _y) {
+    x = _x;
+    y = _y;
+  }
+  
+  void setBack() {
+    x = old_x;
+    y = old_y;
+  }
+  
   void setPlayer(int _p) {
      player = _p; 
   }
+  
 }
 
 /** constructor */
 void setup() {
   size(WIDTH, HEIGHT);
   background(0);
+  
+  a_button_pressed = false;
   players = new button[8][8];
   int numPlayers = 1;
   // fills the board on each side with players
@@ -103,14 +128,48 @@ void draw() {
 
 /** allows the movement of the buttons */
 void move() {
-  if (mousePressed) {
-     println("pressed it " + mouseX + " " + mouseY); 
-    }   
+  // update if a button was pressed    
+   if (a_button_pressed) {
+    // if mouse button stays pressed, update the position of the button
+    if (mousePressed) {
+      players[pressed_i][pressed_j].setXY(mouseX, mouseY);
+      a_button_pressed = true;
+    } 
+     // else if the movement is valid, it should be set to this postion
+     // if not vaid, move it back to the old position  
+    else {
+      players[pressed_i][pressed_j].setBack();   
+      a_button_pressed = false;
+      pressed_i = 0;
+      pressed_j = 0;
+    } 
   }
+  else if (mousePressed) {
+    float r = (SIZE_FIELD/2);
+    println("pressed it " + mouseX + " " + mouseY); 
+    // so now, we need to find the corresponding button
+    for (int i = 0; i < 8; i++) {
+      for (int j = 0; j < 8; j++) {
+        if (players[i][j].getPlayer() != 0) {
+          if (overCircle(players[i][j].getX(), players[i][j].getY(), r)){
+            players[i][j].setXY(mouseX, mouseY);
+            players[i][j].setPlayer(0);
+            players[i][j].setPressed(true);
+            pressed_i = i;
+            pressed_j = j;
+            a_button_pressed = true;
+            break;
+            }
+          }
+        }
+      }
+    }
+}
+  
 
 
 /** true if its over the circle */
-boolean overCircle(int x, int y, int diameter) {
+boolean overCircle(float x, float y, float diameter) {
   float disX = x - mouseX;
   float disY = y - mouseY;
   if (sqrt(sq(disX) + sq(disY)) < diameter/2 ) {
@@ -136,19 +195,21 @@ void draw_players() {
     for (int j = 0; j < 8 ; j++) {
         stroke(255);
         y+=SIZE_FIELD;
-        print((players[i][j]).getPlayer() + " ");
+        //print((players[i][j]).getPlayer() + " ");
         
-        if ( (players[i][j]).getPlayer() != 0 ) {
+        if ( (players[i][j]).getPlayer() != 0 || (players[i][j]).getStatus()) {
           if ((players[i][j]).getPlayer() == PLAYER_ONE)   
             fill(122, 0, 0);
           else if ((players[i][j]).getPlayer() == PLAYER_TWO) 
             fill(0, 122, 0);
+            else if ((players[i][j]).getStatus())
+              fill(0,122,122);
           ellipse((players[i][j]).getX(), (players[i][j]).getY(), r, r);
         }
       }
-      println();
+      //println();
       x+=SIZE_FIELD;
-    } println();
+    } //println();
   }
 
 
