@@ -6,23 +6,27 @@ int HEIGHT = 460;
 /* number of players on each side */
 int NUM_PLAYER = 8;
 
+int PLAYER_ONE = 1;
+int PLAYER_TWO = -1;
+
+/** represents a single button */
 class button {
-  int x;
-  int y;
+  float x;
+  float y;
   int player;
   boolean pressed;
   
-  button (int _x, int _y, int _player, boolean _pressed) {
+  button (float _x, float _y, int _player, boolean _pressed) {
       x = _x;
       y = _y;
       player = _player;
       pressed = _pressed;
   }
   
-  int getX(){
+  float getX(){
     return x;
   }
-  int getY(){
+  float getY(){
     return y;
   }
   int getPlayer(){
@@ -30,6 +34,9 @@ class button {
   }
   boolean getStatus() {
     return pressed;
+  }
+  void setPlayer(int _p) {
+     player = _p; 
   }
 }
 
@@ -41,9 +48,18 @@ void setup() {
   int numPlayers = 1;
   // fills the board on each side with players
   // stops if numPlayers is as big as NUM_PLAYER
-  for (int i = 0; i < 8; i++) 
-    for (int j = 0; j < 8; j++)
-      players[i][j] = new button(-1,-1,0,false);
+  float r = (SIZE_FIELD/2);
+  float x_pos = frame_size + 25;
+  float y_pos = frame_size;         
+
+  for (int i = 0; i < 8; i++) {
+    y_pos = frame_size + 25;
+    for (int j = 0; j < 8; j++) {
+      players[i][j] = new button(x_pos,y_pos,0,false);
+      y_pos+=SIZE_FIELD; 
+      }
+    x_pos+=SIZE_FIELD;
+    }
       
   for (int y = 0; y < 3; y++) {
     for (int x = 0; x < 8; x++) {
@@ -54,7 +70,7 @@ void setup() {
           y % 2 == 0) || 
          (x % 2 == 1 && 
           y % 2 == 1)) {
-        players[x][y] = new button(-1,-1,1,false);
+        players[x][y].setPlayer(PLAYER_ONE);
         numPlayers++;
       }
     }
@@ -69,7 +85,7 @@ void setup() {
            y % 2 == 0) || 
           (x % 2 == 1 && 
            y % 2 == 1)) {
-        players[x][y] = new button(-1,-1,-1,false);
+        players[x][y].setPlayer(PLAYER_TWO);
         numPlayers++;
       } 
     }
@@ -120,11 +136,12 @@ void draw_players() {
     for (int j = 0; j < 8 ; j++) {
         stroke(255);
         y+=SIZE_FIELD;
-        print((players[i][j]).getPlayer());
+        print((players[i][j]).getPlayer() + " ");
+        
         if ( (players[i][j]).getPlayer() != 0 ) {
-          if ((players[i][j]).getPlayer() == 1)   
+          if ((players[i][j]).getPlayer() == PLAYER_ONE)   
             fill(122, 0, 0);
-          else if ((players[i][j]).getPlayer() == -1) 
+          else if ((players[i][j]).getPlayer() == PLAYER_TWO) 
             fill(0, 122, 0);
           ellipse((players[i][j]).getX(), (players[i][j]).getY(), r, r);
         }
