@@ -16,7 +16,10 @@ void setup() {
   // stops if numPlayers is as big as NUM_PLAYER
     
   for (int y = 0; y < 3; y++) {
-    for (int x = 0; x < 3; x++) {
+    for (int x = 0; x < 8; x++) {
+     println(x + " " + y); 
+     if (numPlayers > NUM_PLAYER)
+        break;
      if (x % 2 == 0 && 
         y % 2 == 0) {
         players[x][y] = 1;
@@ -32,33 +35,25 @@ void setup() {
         else 
           players[x][y] = 0;
       }
-      println(x + " " + y);
-      if (numPlayers >= NUM_PLAYER)
-        break;
     }
   } 
-  /*
+  
   numPlayers = 1;
   for (int y = 7; y > 4; y--) {
-    for (int x = 7; x > 0; x--) {
-      if (x % 2 == 1 && 
-        y % 2 == 1) {
+    for (int x = 0; x < 8; x++) {
+      if (numPlayers > NUM_PLAYER)
+        break;
+      if ((x % 2 == 0 && 
+        y % 2 == 0) || 
+          (x % 2 == 1 && 
+          y % 2 == 1)) {
         players[x][y] = -1;
         numPlayers++;
-      } else {
-        if (x % 2 == 0 && 
-          y % 2 == 0) {
-          players[x][y] = -1;
-          numPlayers++;
-        }
+      } 
         else 
           players[x][y] = 0;
       }
-      
-      if (numPlayers >= NUM_PLAYER)
-        break;
     }
-  }*/
 }
 
 /** draws everything */
@@ -73,27 +68,31 @@ void draw() {
  */
 void draw_players() {
   float r = (SIZE_FIELD/2);
-  float x = frame_size;
-  float y = frame_size;
+  float x = frame_size + 25;
+  float y = frame_size;         
   println();
   // print the checkers on the checker board
-  for (int i = 0; i < 8 ; y+=SIZE_FIELD, i++) {
+  for (int i = 0; i < 8 ; i++) {
+    
+    y = 5;
+    
     // Begin loop for rows
-    for (int j = 0; j < 8 ; x+=SIZE_FIELD, j++) {
+    for (int j = 0; j < 8 ; j++) {
         stroke(255);
-//        print(players[j][i] + " ");
+        y+=SIZE_FIELD;
+        print(players[i][j] + " ");
         if ( players[i][j] != 0 ) {
-          
           if (players[i][j] == 1)   
             fill(122, 0, 0);
           else if (players[i][j] == -1) 
             fill(0, 122, 0);
           
-          ellipse(x+r, y+r, r, r);
+          ellipse(x, y, r, r);
         
         }
       }
-  //    println();
+      println();
+      x+=SIZE_FIELD;
     }
   }
 
