@@ -47,9 +47,14 @@ class button {
     pressed = _pressed;
   }
   
-  void setXY(int _x, int _y) {
+  void setXY(float _x, float _y) {
     x = _x;
     y = _y;
+  }
+  
+  void setoldXY(float _x, float _y) {
+    old_x = _x;
+    old_y = _y;
   }
   
   void setBack() {
@@ -138,10 +143,29 @@ void move() {
      // else if the movement is valid, it should be set to this postion
      // if not vaid, move it back to the old position  
     else {
-      players[pressed_i][pressed_j].setBack();   
-      a_button_pressed = false;
+      int i_pos = (int) map(mouseX, 0, HEIGHT, -1, 8);
+      int j_pos = (int) map(mouseY, 0, WIDTH,  -1, 8);
+      // if it is in those borders, it is valid 
+      // it is also not allowed, that theire is a button at this position
+      // also the field needs too be at a spedified field 
+      if (i_pos >= 0 && i_pos <= 7 && j_pos >= 0 && j_pos <= 7 && 
+          ((i_pos % 2 == 0 && j_pos % 2 == 0) || 
+           (i_pos % 2 == 1 && j_pos % 2 == 1)) ) {
+         println("valid");
+        players[i_pos][j_pos].setPlayer( players[pressed_i][pressed_j].getPlayer() );
+        players[i_pos][j_pos].setoldXY((players[pressed_i][pressed_j].getX()), (players[pressed_i][pressed_j].getY()));
+        players[pressed_i][pressed_j].setPlayer(0);
+        players[i_pos][j_pos].setPressed(false);
+        }
+      else {
+        players[pressed_i][pressed_j].setBack();   
+        players[pressed_i][pressed_j].setPressed(false);
+        }
+        println("validoutside");
       pressed_i = 0;
       pressed_j = 0;
+      
+      a_button_pressed = false;
     } 
   }
   else if (mousePressed) {
