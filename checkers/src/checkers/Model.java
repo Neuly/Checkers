@@ -22,7 +22,6 @@ public class Model {
 		this.fieldSize = fieldSize;
 		this.frameSize = frameSize;
 		this.tokenRadius = tokenRadius;
-		turn = Players.TOP_PLAYER;
 		board = new Board(boardSize);
 		activeToken = null;
 		topPlayerTokens = 0;
@@ -146,6 +145,7 @@ public class Model {
 	}
 	
 	public void resetGame() {
+		turn = Players.TOP_PLAYER;
 		for(int row = 0; row < boardSize; row++)
 			for(int column = 0; column < boardSize; column++)
 				if(row < (boardSize/2 - 1) && isBlack(row, column)) {
