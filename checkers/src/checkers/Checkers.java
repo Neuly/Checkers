@@ -14,6 +14,10 @@ public class Checkers extends PApplet {
 	private Model model;
 	private View view;
 	
+	public static void main(String args[]) {
+		PApplet.main(new String[] { "--present", "checkers.Checkers" });
+	}
+	
 	/** constructor */
 	public void setup() {
 		model = new Model(this, BOARD_SIZE, FIELD_SIZE, FRAME_SIZE, TOKEN_RADIUS);
