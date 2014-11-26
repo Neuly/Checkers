@@ -13,6 +13,7 @@ public class View {
 	private int fieldSize;
 	private float tokenRadius;
 	private PFont font;
+	private Button resetButton;
 	
 	public View(PApplet painter, int width, int height, int fieldSize, int frameSize, float tokenRadius) {
 		this.painter = painter;
@@ -24,6 +25,11 @@ public class View {
 		font = painter.createFont("Arial", 16, true); 
 		painter.size(width, height);
 		painter.background(0);
+		resetButton = new Button(painter, width - 140, height - 45, 130, 40, frameSize);
+	}
+	
+	public boolean isReset() {
+		return resetButton.isButtonPressed();
 	}
 	
 	/**
@@ -70,7 +76,7 @@ public class View {
 	public void writeValid(boolean valid) {
 		painter.fill(0, 0, 0);
 		painter.stroke(0, 0, 0);
-		painter.rect(0, height - frameSize, width, frameSize);
+		painter.rect(0, height - frameSize, width - 140, frameSize);
 		painter.textFont(font, 36);
 		painter.textAlign(PApplet.CENTER);
 		if(valid) {
@@ -78,7 +84,7 @@ public class View {
 			painter.text("Valid move!", width/2, height - frameSize/3);
 		} else {
 			painter.fill(255, 0, 0);
-			painter.text("Invalid move! Try again!", width/2, height - frameSize/3);
+			painter.text("Invalid move!", width/2, height - frameSize/3);
 		}
 	}
 	

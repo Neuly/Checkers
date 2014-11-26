@@ -27,7 +27,7 @@ public class Model {
 		activeToken = null;
 		topPlayerTokens = 0;
 		bottomPlayerTokens = 0;
-		initTokens();
+		resetGame();
 	}
 	
 	public Players getTurn() {
@@ -145,7 +145,7 @@ public class Model {
 			topPlayerTokens--;
 	}
 	
-	private void initTokens() {
+	public void resetGame() {
 		for(int row = 0; row < boardSize; row++)
 			for(int column = 0; column < boardSize; column++)
 				if(row < (boardSize/2 - 1) && isBlack(row, column)) {
@@ -160,7 +160,8 @@ public class Model {
 					Token token = new Token(painter, Players.BOTTOM_PLAYER, x, y, fieldSize, frameSize);
 					board.setToken(token, row, column);
 					bottomPlayerTokens++;
-				}
+				} else
+					board.clearToken(row, column);
 	}
 	
 	private boolean isBlack(int row, int column) {

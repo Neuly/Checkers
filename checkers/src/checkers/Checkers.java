@@ -26,8 +26,11 @@ public class Checkers extends PApplet {
 		view.draw_background();
 		view.draw_tokens(model.getBoard().getTokens());
 		
-		if(mousePressed)
+		if(mousePressed) {
 			model.mousePressedEvent();
+			if(view.isReset())
+				model.resetGame();
+		}
 	}
 	
 	public void mouseReleased() {
